@@ -21,9 +21,13 @@ export const STUDENT_SORTABLE_FIELDS: Record<
   string,
   (order: 'asc' | 'desc') => Prisma.StudentOrderByWithRelationInput[]
 > = {
+  // Vietnamese class rosters are conventionally alphabetized by given name
+  // ("tên", the last word) rather than family name, unlike Western surname
+  // ordering — so firstName is the primary key here, familyAndMiddleName
+  // only a secondary tiebreak for students who share a given name.
   fullName: (order) => [
-    { familyAndMiddleName: order },
     { firstName: order },
+    { familyAndMiddleName: order },
     ...STABLE_TIEBREAK,
   ],
   className: (order) => [{ class: { name: order } }, ...STABLE_TIEBREAK],
