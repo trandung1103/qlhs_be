@@ -79,11 +79,34 @@ export const DEFAULT_STUDENT_SORT: Prisma.StudentOrderByWithRelationInput[] = [
 ];
 
 // Fields searched by the free-text `search` query parameter (case-insensitive).
+// Every plain string column on Student — enums (gender/status), booleans and
+// dates aren't included since Prisma's `contains` only applies to strings.
 export const STUDENT_SEARCHABLE_FIELDS: Array<keyof Prisma.StudentWhereInput> = [
   'fullName',
   'familyAndMiddleName',
   'firstName',
   'identifier',
+  'ethnicity',
+  'nationality',
+  'address',
+  'studentPhone',
+  'previousSchool',
+  'fatherName',
   'fatherPhone',
+  'fatherJob',
+  'fatherWorkplace',
+  'motherName',
   'motherPhone',
+  'motherJob',
+  'motherWorkplace',
+  'healthInsuranceNumber',
+  'healthInsuranceRegisteredHospital',
+  'emergencyContactName',
+  'emergencyContactRelationship',
+  'emergencyContactPhone',
+  'policyCategory',
+  'bloodType',
+  'allergy',
+  'healthNotes',
+  'notes',
 ];

@@ -1,6 +1,6 @@
 import { Gender, StudentStatus } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsEnum, IsIn, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsEnum, IsIn, IsOptional, IsString } from 'class-validator';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { STUDENT_SORTABLE_FIELDS } from '../students.constants';
 
@@ -34,6 +34,26 @@ export class QueryStudentsDto extends PaginationQueryDto {
   @Transform(toBoolean)
   @IsBoolean()
   hasHealthInsurance?: boolean;
+
+  @IsOptional()
+  @IsString()
+  ethnicity?: string;
+
+  @IsOptional()
+  @IsString()
+  bloodType?: string;
+
+  @IsOptional()
+  @IsString()
+  policyCategory?: string;
+
+  @IsOptional()
+  @IsDateString()
+  dateOfBirthFrom?: string;
+
+  @IsOptional()
+  @IsDateString()
+  dateOfBirthTo?: string;
 
   // Omitted -> the teacher-defined manual order (displayOrder ASC) is used.
   @IsOptional()
