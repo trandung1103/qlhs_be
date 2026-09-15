@@ -1,0 +1,30 @@
+import { Gender, StudentStatus } from '@prisma/client';
+export interface DemoStudentSeed {
+    fullName: string;
+    dateOfBirth?: string;
+    gender?: Gender;
+    identifier?: string;
+    ethnicity?: string;
+    nationality?: string;
+    address?: string;
+    studentPhone?: string;
+    status?: StudentStatus;
+    fatherName?: string;
+    fatherPhone?: string;
+    fatherJob?: string;
+    motherName?: string;
+    motherPhone?: string;
+    motherJob?: string;
+    hasHealthInsurance?: boolean;
+    healthInsuranceNumber?: string;
+    healthInsuranceStartDate?: string;
+    healthInsuranceEndDate?: string;
+    emergencyContactName?: string;
+    emergencyContactRelationship?: string;
+    emergencyContactPhone?: string;
+    policyCategory?: string;
+    bloodType?: string;
+    allergy?: string;
+    notes?: string;
+}
+export declare const DEMO_STUDENTS: DemoStudentSeed[];

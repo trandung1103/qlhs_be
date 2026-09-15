@@ -1,29 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { ValidationPipe } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import express from 'express';
 import { AppModule } from '../src/app.module';
-import { HttpExceptionFilter } from '../src/common/filters/http-exception.filter';
-import { PrismaExceptionFilter } from '../src/common/filters/prisma-exception.filter';
+import { configureApp } from '../src/bootstrap';
 
 const server = express();
 let bootstrapPromise: Promise<void> | null = null;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-
-  app.enableCors({ origin: process.env.FRONTEND_URL });
-  app.setGlobalPrefix('api');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  );
-  app.useGlobalFilters(new PrismaExceptionFilter(), new HttpExceptionFilter());
-
+  configureApp(app);
   await app.init();
 }
 
