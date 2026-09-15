@@ -1,9 +1,4 @@
 {
   "version": 2,
-  "buildCommand": "npm run vercel-build",
-  "functions": {
-    "src/main.ts": {
-      "maxDuration": 30
-    }
-  }
+  "buildCommand": "npm run vercel-build"
 }
