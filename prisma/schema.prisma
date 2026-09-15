@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum StudentStatus {
+  STUDYING // Đang học
+  TRANSFERRED // Chuyển trường
+  DROPPED_OUT // Nghỉ học
+  ON_LEAVE // Bảo lưu
+  COMPLETED // Hoàn thành năm học
+}
+
+enum FieldType {
+  TEXT
+  TEXTAREA
+  NUMBER
+  DATE
+  SELECT
+  RADIO
+  CHECKBOX
+}
+
+model SchoolYear {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  startYear Int
+  endYear   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  classes         Class[]
+  students        Student[]
+  fieldDefinitions FieldDefinition[]
+
+  @@map("school_years")
+}
+
+model Class {
+  id           String   @id @default(cuid())
+  schoolYearId String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  schoolYear SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  students   Student[]
+
+  @@unique([schoolYearId, name])
+  @@index([schoolYearId])
+  @@map("classes")
+}
+
+model Student {
+  id           String @id @default(cuid())
+  schoolYearId String
+  classId      String
+  displayOrder Int    @default(0)
+
+  // Name
+  fullName            String?
+  familyAndMiddleName String? // Họ và đệm
+  firstName           String? // Tên
+
+  dateOfBirth   DateTime?
+  gender        Gender?
+  identifier    String? // Mã định danh cá nhân (không unique toàn cục)
+  ethnicity     String? // Dân tộc
+  nationality   String? // Quốc tịch
+  address       String?
+  studentPhone  String?
+
+  // Academic
+  previousSchool String? // Trường cũ
+  status         StudentStatus?
+
+  // Father
+  fatherName      String?
+  fatherPhone     String?
+  fatherJob       String?
+  fatherWorkplace String?
+
+  // Mother
+  motherName      String?
+  motherPhone     String?
+  motherJob       String?
+  motherWorkplace String?
+
+  // Health insurance
+  hasHealthInsurance                Boolean?
+  healthInsuranceNumber             String?
+  healthInsuranceStartDate          DateTime?
+  healthInsuranceEndDate            DateTime?
+  healthInsuranceRegisteredHospital String?
+
+  // Emergency contact
+  emergencyContactName         String?
+  emergencyContactRelationship String?
+  emergencyContactPhone        String?
+
+  // Policy
+  policyCategory String? // Đối tượng chính sách
+
+  // Health
+  bloodType   String?
+  allergy     String?
+  healthNotes String?
+
+  // Other
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  schoolYear  SchoolYear          @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  class       Class               @relation(fields: [classId], references: [id], onDelete: Restrict)
+  fieldValues StudentFieldValue[]
+
+  @@index([schoolYearId])
+  @@index([classId])
+  @@index([classId, displayOrder])
+  @@map("students")
+}
+
+model FieldDefinition {
+  id            String    @id @default(cuid())
+  schoolYearId  String
+  name          String
+  key           String
+  type          FieldType
+  isSystem      Boolean   @default(false)
+  isRequired    Boolean   @default(false)
+  isVisible     Boolean   @default(true)
+  isSearchable  Boolean   @default(false)
+  isSortable    Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  displayOrder  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  schoolYear SchoolYear          @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  options    FieldOption[]
+  values     StudentFieldValue[]
+
+  @@unique([schoolYearId, key])
+  @@index([schoolYearId])
+  @@map("field_definitions")
+}
+
+model FieldOption {
+  id                String   @id @default(cuid())
+  fieldDefinitionId String
+  label             String
+  value             String
+  displayOrder      Int      @default(0)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  fieldDefinition FieldDefinition @relation(fields: [fieldDefinitionId], references: [id], onDelete: Cascade)
+
+  @@index([fieldDefinitionId])
+  @@map("field_options")
+}
+
+model StudentFieldValue {
+  id                String   @id @default(cuid())
+  studentId         String
+  fieldDefinitionId String
+  value             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  student         Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fieldDefinition FieldDefinition @relation(fields: [fieldDefinitionId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([fieldDefinitionId])
+  @@map("student_field_values")
+}

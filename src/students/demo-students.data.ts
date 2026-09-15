@@ -1,0 +1,187 @@
+import { Gender, StudentStatus } from '@prisma/client';
+
+export interface DemoStudentSeed {
+  fullName: string;
+  dateOfBirth?: string;
+  gender?: Gender;
+  identifier?: string;
+  ethnicity?: string;
+  nationality?: string;
+  address?: string;
+  studentPhone?: string;
+  status?: StudentStatus;
+  fatherName?: string;
+  fatherPhone?: string;
+  fatherJob?: string;
+  motherName?: string;
+  motherPhone?: string;
+  motherJob?: string;
+  hasHealthInsurance?: boolean;
+  healthInsuranceNumber?: string;
+  healthInsuranceStartDate?: string;
+  healthInsuranceEndDate?: string;
+  emergencyContactName?: string;
+  emergencyContactRelationship?: string;
+  emergencyContactPhone?: string;
+  policyCategory?: string;
+  bloodType?: string;
+  allergy?: string;
+  notes?: string;
+}
+
+const inDays = (days: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString();
+};
+
+export const DEMO_STUDENTS: DemoStudentSeed[] = [
+  {
+    fullName: 'Nguyễn Văn An',
+    dateOfBirth: '2015-03-12',
+    gender: 'MALE',
+    identifier: '038315001234',
+    ethnicity: 'Kinh',
+    nationality: 'Việt Nam',
+    address: 'Xã Quán Bàu, Nghệ An',
+    fatherName: 'Nguyễn Văn Bố',
+    fatherPhone: '0912345671',
+    fatherJob: 'Kỹ sư',
+    motherName: 'Trần Thị Mẹ',
+    motherPhone: '0912345672',
+    motherJob: 'Giáo viên',
+    hasHealthInsurance: true,
+    healthInsuranceNumber: 'HS4010012345671',
+    healthInsuranceStartDate: '2026-01-01',
+    healthInsuranceEndDate: inDays(200),
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Trần Thị Bình',
+    dateOfBirth: '2015-07-20',
+    gender: 'FEMALE',
+    ethnicity: 'Kinh',
+    address: 'Phường Hà Huy Tập, Nghệ An',
+    fatherPhone: '0912345673',
+    motherName: 'Lê Thị Mẹ',
+    motherPhone: '0912345674',
+    hasHealthInsurance: true,
+    healthInsuranceNumber: 'HS4010012345672',
+    healthInsuranceEndDate: inDays(15),
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Lê Văn Cường',
+    dateOfBirth: '2015-01-05',
+    gender: 'MALE',
+    address: 'Xã Nghi Phú, Nghệ An',
+    hasHealthInsurance: true,
+    healthInsuranceNumber: 'HS4010012345673',
+    healthInsuranceEndDate: inDays(-30),
+    status: 'STUDYING',
+    notes: 'Cần nhắc phụ huynh gia hạn BHYT',
+  },
+  {
+    fullName: 'Phạm Thị Dung',
+    dateOfBirth: '2015-11-30',
+    gender: 'FEMALE',
+    address: 'Phường Trường Thi, Nghệ An',
+    hasHealthInsurance: false,
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Hoàng Văn Em',
+    gender: 'MALE',
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Vũ Thị Phương',
+    dateOfBirth: '2015-05-18',
+    gender: 'FEMALE',
+    address: 'Hà Nội',
+    status: 'TRANSFERRED',
+    notes: 'Chuyển trường theo gia đình',
+  },
+  {
+    fullName: 'Đặng Văn Giang',
+    dateOfBirth: '2015-02-14',
+    gender: 'MALE',
+    status: 'DROPPED_OUT',
+  },
+  {
+    fullName: 'Bùi Thị Hoa',
+    dateOfBirth: '2015-09-09',
+    gender: 'FEMALE',
+    status: 'ON_LEAVE',
+    notes: 'Bảo lưu do sức khỏe',
+  },
+  {
+    fullName: 'Đỗ Văn Inh',
+    dateOfBirth: '2015-04-01',
+    gender: 'MALE',
+    status: 'COMPLETED',
+  },
+  {
+    fullName: 'Ngô Thị Kim',
+    dateOfBirth: '2015-06-25',
+    gender: 'FEMALE',
+    identifier: '038315009876',
+    ethnicity: 'Kinh',
+    nationality: 'Việt Nam',
+    address: 'Xã Hưng Đông, Nghệ An',
+    studentPhone: '0900000099',
+    fatherName: 'Ngô Văn Bố',
+    fatherPhone: '0912345675',
+    fatherJob: 'Bác sĩ',
+    motherName: 'Phạm Thị Mẹ',
+    motherPhone: '0912345676',
+    motherJob: 'Kế toán',
+    hasHealthInsurance: true,
+    healthInsuranceNumber: 'HS4010012345679',
+    healthInsuranceStartDate: '2026-01-01',
+    healthInsuranceEndDate: inDays(300),
+    emergencyContactName: 'Ngô Văn Ông',
+    emergencyContactRelationship: 'Ông nội',
+    emergencyContactPhone: '0912345677',
+    policyCategory: 'Con gia đình chính sách',
+    bloodType: 'O',
+    allergy: 'Hải sản',
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Dương Văn Long',
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Lý Thị Mai',
+    dateOfBirth: '2015-08-08',
+    gender: 'FEMALE',
+    ethnicity: 'Tày',
+    address: 'Xã Nghi Kim, Nghệ An',
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Phan Văn Nam',
+    dateOfBirth: '2015-10-10',
+    gender: 'MALE',
+    ethnicity: "H'Mông",
+    address: 'Xã Nghi Ân, Nghệ An',
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Trịnh Thị Oanh',
+    dateOfBirth: '2015-12-12',
+    gender: 'FEMALE',
+    bloodType: 'A',
+    allergy: 'Không',
+    status: 'STUDYING',
+  },
+  {
+    fullName: 'Đinh Văn Phúc',
+    dateOfBirth: '2015-03-03',
+    gender: 'MALE',
+    address: 'Xã Nghi Liên, Nghệ An',
+    policyCategory: 'Hộ nghèo',
+    status: 'STUDYING',
+  },
+];
