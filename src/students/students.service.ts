@@ -342,8 +342,17 @@ export class StudentsService {
     });
     const studentById = new Map(students.map((s) => [s.id, s]));
 
+    const activeFields = await this.prisma.fieldDefinition.findMany({
+      where: { schoolYearId: dto.schoolYearId, isActive: true },
+    });
+    const activeFieldById = new Map(activeFields.map((f) => [f.id, f]));
+
     const errors: BulkUpdateError[] = [];
     const preparedUpdates: Array<{ studentId: string; data: Prisma.StudentUpdateInput }> = [];
+    const preparedCustomFields: Array<{
+      studentId: string;
+      customFields: Record<string, string | string[]>;
+    }> = [];
 
     for (let i = 0; i < dto.rows.length; i++) {
       const row = dto.rows[i];
@@ -378,6 +387,19 @@ export class StudentsService {
         continue;
       }
 
+      if (customFields && typeof customFields === 'object') {
+        const unknownField = Object.keys(customFields).find((id) => !activeFieldById.has(id));
+        if (unknownField) {
+          errors.push({
+            row: rowNumber,
+            field: unknownField,
+            message: 'Field does not exist or is not active for this school year',
+          });
+          continue;
+        }
+        preparedCustomFields.push({ studentId: row.studentId, customFields });
+      }
+
       preparedUpdates.push({ studentId: row.studentId, data: this.buildUpdateData(instance) });
     }
 
@@ -390,6 +412,10 @@ export class StudentsService {
         this.prisma.student.update({ where: { id: u.studentId }, data: u.data }),
       ),
     );
+
+    for (const { studentId, customFields } of preparedCustomFields) {
+      await this.setCustomFieldValues(studentId, dto.schoolYearId, customFields);
+    }
 
     return { success: true, updatedCount: preparedUpdates.length, errors: [] };
   }
