@@ -29,7 +29,10 @@ async function bootstrap() {
 
 export default async function handler(req: Request, res: Response) {
   if (!bootstrapPromise) {
-    bootstrapPromise = bootstrap();
+    bootstrapPromise = bootstrap().catch((err) => {
+      bootstrapPromise = null;
+      throw err;
+    });
   }
   await bootstrapPromise;
   server(req, res);
