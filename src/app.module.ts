@@ -8,6 +8,7 @@ import { ClassesModule } from './classes/classes.module';
 import { StudentsModule } from './students/students.module';
 import { FieldsModule } from './fields/fields.module';
 import { ExportsModule } from './exports/exports.module';
+import { BackupModule } from './backup/backup.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ExportsModule } from './exports/exports.module';
     StudentsModule,
     FieldsModule,
     ExportsModule,
+    BackupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

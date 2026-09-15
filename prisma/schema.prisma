@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Gender {
@@ -187,4 +188,14 @@ model StudentFieldValue {
   @@index([studentId])
   @@index([fieldDefinitionId])
   @@map("student_field_values")
+}
+
+// Singleton row (id = "singleton") tracking when data was last backed up,
+// so the backup endpoint can skip runs where nothing changed.
+model BackupLog {
+  id           String    @id @default("singleton")
+  lastBackupAt DateTime?
+  updatedAt    DateTime  @updatedAt
+
+  @@map("backup_logs")
 }
